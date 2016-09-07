@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">LiteServiceDemo</string>
+    <string name="label_device_address">device address:</string>
+    <string name="label_state">device state:</string>
+    <string name="disconnected">disconnect</string>
+    <string name="connected">connect</string>
+    <string name="label_data">data</string>
+    <string name="no_data">no_data</string>
+
+
+</resources>
