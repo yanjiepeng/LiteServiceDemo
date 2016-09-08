@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.jp.tazan.liteservicedemo.api.HttpApi;
 import com.litesuits.bluetooth.LiteBluetooth;
 import com.litesuits.bluetooth.scan.PeriodScanCallback;
 
@@ -23,6 +24,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static int TIME_OUT_SCAN = 5000;
     LiteBluetooth liteBluetooth;
     BleDeviceAdapter mDeviceAdapter;
+    Retrofit retrofit;
 
 
     @Override
@@ -45,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
         if (liteBluetooth == null) {
             liteBluetooth = LiteBtManager.getInstance(this);
         }
+
+         retrofit = new Retrofit.Builder()
+                .baseUrl(HttpApi.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         lvDevices.setOnItemClickListener(new DeviceItemClickListener());
 

@@ -25,7 +25,10 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ControlActivity"></activity>
+        <activity android:name=".ControlActivity" />
+        <activity android:name=".TabActivity">
+
+        </activity>
     </application>
 
 </manifest>
