@@ -12,18 +12,24 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jp.tazan.liteservicedemo.BLEService.LiteBleService;
 import com.jp.tazan.liteservicedemo.event.BleServiceEvent;
+import com.jp.tazan.liteservicedemo.event.CharacteristicEvent;
+import com.jp.tazan.liteservicedemo.model.BleRequest;
+import com.litesuits.bluetooth.LiteBluetooth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,11 +152,24 @@ public class ControlActivity extends AppCompatActivity {
 
     }
 
+    @Subscribe (threadMode = ThreadMode.MAIN)
+    public void getCharacteristicData(CharacteristicEvent event) {
+        if (event.getCharacteristic()!=null) {
+            Toast.makeText(ControlActivity.this, Arrays.toString(event.getCharacteristic().getValue())+"", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(ControlActivity.this, "获取cha失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private final ExpandableListView.OnChildClickListener serviceListClickListener = new ExpandableListView.OnChildClickListener() {
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
-
+            String chaUUID = childs.get(groupPosition).get(childPosition).get("chaUUID");
+            String serUUID = group.get(groupPosition).get("serviceUUID");
+            if (chaUUID != null && serUUID != null) {
+                mBluetoothLeService.readCharacteristicData(new BleRequest(serUUID,chaUUID ,new byte[]{0x01,0x02}) );
+            }
             return false;
         }
     };

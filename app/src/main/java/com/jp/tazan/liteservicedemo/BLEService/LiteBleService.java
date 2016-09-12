@@ -3,6 +3,7 @@ package com.jp.tazan.liteservicedemo.BLEService;
 import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -12,8 +13,13 @@ import android.widget.Toast;
 
 import com.jp.tazan.liteservicedemo.LiteBtManager;
 import com.jp.tazan.liteservicedemo.event.BleServiceEvent;
+import com.jp.tazan.liteservicedemo.event.CharacteristicEvent;
+import com.jp.tazan.liteservicedemo.event.MsgEvent;
+import com.jp.tazan.liteservicedemo.model.BleRequest;
 import com.litesuits.bluetooth.LiteBleGattCallback;
 import com.litesuits.bluetooth.LiteBluetooth;
+import com.litesuits.bluetooth.conn.BleCharactCallback;
+import com.litesuits.bluetooth.conn.LiteBleConnector;
 import com.litesuits.bluetooth.exception.BleException;
 
 import org.greenrobot.eventbus.EventBus;
@@ -122,5 +128,47 @@ public class LiteBleService extends Service {
         }
     };
 
+
+    /*
+     读取特征值数据
+     */
+    public void readCharacteristicData(BleRequest request) {
+
+        LiteBleConnector connector = liteBluetooth.newBleConnector();
+        connector.withUUIDString(request.getServiceUUID() ,request.getCharUUID() , null).readCharacteristic(new BleCharactCallback() {
+            @Override
+            public void onSuccess(BluetoothGattCharacteristic bluetoothGattCharacteristic) {
+
+                EventBus.getDefault().post(new CharacteristicEvent(bluetoothGattCharacteristic));
+            }
+
+            @Override
+            public void onFailure(BleException e) {
+                EventBus.getDefault().post(new CharacteristicEvent(null));
+            }
+        });
+
+    }
+
+    /*
+     写特征值数据
+    */
+    public void writeCharacteristicData(BleRequest request) {
+
+        LiteBleConnector connector = liteBluetooth.newBleConnector();
+        connector.withUUIDString(request.getServiceUUID() ,request.getCharUUID() , null).writeCharacteristic(request.getData() , new BleCharactCallback() {
+            @Override
+            public void onSuccess(BluetoothGattCharacteristic bluetoothGattCharacteristic) {
+
+                EventBus.getDefault().post(new CharacteristicEvent(bluetoothGattCharacteristic));
+            }
+
+            @Override
+            public void onFailure(BleException e) {
+                EventBus.getDefault().post(new CharacteristicEvent(null));
+            }
+        });
+
+    }
 
 }

@@ -10,8 +10,17 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
+
+    <string name="help">帮助</string>
+    <string name="visit_website">访问官网</string>
+    <string name="customer_servicephone">客服电话</string>
+    <string name="about">关于</string>
+    <string name="service_tel">400 822 2325</string>
+    <string name="about_message">Copyright © 2014 cdtazan.com Inc. All Rights Reserved.</string>
 </resources>

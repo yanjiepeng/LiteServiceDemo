@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     LiteBluetooth liteBluetooth;
     BleDeviceAdapter mDeviceAdapter;
     Retrofit retrofit;
+    HttpApi api;
 
 
     @Override
@@ -50,10 +50,12 @@ public class MainActivity extends AppCompatActivity {
             liteBluetooth = LiteBtManager.getInstance(this);
         }
 
-         retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl(HttpApi.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        api = retrofit.create(HttpApi.class);
+        //通过此api来进行联网请求
 
         lvDevices.setOnItemClickListener(new DeviceItemClickListener());
 
